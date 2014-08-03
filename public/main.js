@@ -161,8 +161,10 @@ angular.module('MainModule').controller('MainController', ['$scope', '$famous',
       deleteOutscopeCircles();
     });
 
-    //TODO: loading icon
+    $scope.initialized = true;
+
     //TODO: sound
+    //TODO: user counter
     //BUG: resize does not work
   }
 ]);

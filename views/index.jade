@@ -36,6 +36,7 @@ html(ng-app="MainModule")#ng-app
         p {{show_message}}
     .intro(ng-hide="ready", ng-click="ready = true")
       .content
+        img(ng-hide="initialized", src="static/loading.gif")
         h1 暑さをみんなでふっとばせ！
         p [最低限の説明]
         p 画面の上部をタップすると「暑」玉が落ちてきて、画面の下部を押すとそれを弾く。画面外まで出したら消滅する。
