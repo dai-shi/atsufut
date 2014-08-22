@@ -30,8 +30,8 @@ angular.module('MainModule').run(['$rootScope', '$window', '$location',
   }
 ]);
 
-angular.module('MainModule').controller('MainController', ['$scope', '$famous',
-  function($scope, $famous) {
+angular.module('MainModule').controller('MainController', ['$scope', '$famous', '$window',
+  function($scope, $famous, $window) {
 
     var Engine = $famous['famous/core/Engine'];
     var PhysicsEngine = $famous['famous/physics/PhysicsEngine'];
@@ -56,6 +56,33 @@ angular.module('MainModule').controller('MainController', ['$scope', '$famous',
     var force = new Force([0, 0.0007, 0]);
 
     var RADIUS = 20;
+
+    var sound01 = $window.document.getElementById('sound01');
+    var sound02 = $window.document.getElementById('sound02');
+
+    $scope.fingers = {};
+    var fingerKey = Math.floor(Math.random() * 256);
+    var fingerWidth = 60;
+    var fingerHeight = 90;
+
+    function updateFinger(key, x, top) {
+      if (x < -$scope.windowWidth / 2 + fingerWidth / 2) {
+        x = -$scope.windowWidth / 2 + fingerWidth / 2;
+      }
+      if (x > $scope.windowWidth / 2 - fingerWidth / 2) {
+        x = $scope.windowWidth / 2 - fingerWidth / 2;
+      }
+      var pos;
+      if (top) {
+        pos = [x, -$scope.windowHeight / 2 + fingerHeight / 2, 100];
+      } else {
+        pos = [x, $scope.windowHeight / 2, 100];
+      }
+      $scope.fingers[key] = {
+        key: key,
+        position: pos
+      };
+    }
 
     $scope.circles = [];
 
@@ -82,7 +109,11 @@ angular.module('MainModule').controller('MainController', ['$scope', '$famous',
       circle.created_at = Date.now();
       circle.rare1 = Math.random() < 0.01;
       $scope.circles.push(circle);
-      return circle;
+      if (!sound01.ended) {
+        sound01.pause();
+        sound01.currentTime = 0;
+      }
+      sound01.play();
     }
 
     function deleteCircle(circle) {
@@ -101,10 +132,15 @@ angular.module('MainModule').controller('MainController', ['$scope', '$famous',
 
       var repulsion = new Repulsion({
         anchor: [x, $scope.windowHeight / 2],
-        strength: 2,
+        strength: 1.25,
         decayFunction: Repulsion.DECAY_FUNCTIONS.INVERSE
       });
       repulsion.applyForce($scope.circles);
+      if (!sound02.ended) {
+        sound02.pause();
+        sound02.currentTime = 0;
+      }
+      sound02.play();
     }
 
     $scope.clickBody = function(e) {
@@ -114,15 +150,19 @@ angular.module('MainModule').controller('MainController', ['$scope', '$famous',
       var relX = posX - $scope.windowWidth / 2;
       if (posY < $scope.windowHeight / 2) {
         createCircle(relX);
+        updateFinger(fingerKey, relX, true);
         $scope.sendMessage({
           action: 'create',
-          x: relX
+          x: relX,
+          key: fingerKey
         });
       } else {
         repulseCircles(relX);
+        updateFinger(fingerKey, relX, false);
         $scope.sendMessage({
           action: 'repulse',
-          x: relX
+          x: relX,
+          key: fingerKey
         });
       }
     };
@@ -132,8 +172,10 @@ angular.module('MainModule').controller('MainController', ['$scope', '$famous',
       $scope.$apply(function() {
         if (data.action === 'create') {
           createCircle(data.x);
+          updateFinger(data.key, data.x, true);
         } else if (data.action === 'repulse') {
           repulseCircles(data.x);
+          updateFinger(data.key, data.x, false);
         }
       });
     }
@@ -185,5 +227,19 @@ angular.module('MainModule').directive('myTouchstart', ['$swipe',
         });
       }
     };
+  }
+]);
+
+// audio load hack
+angular.module('MainModule').run(['$window',
+  function($window) {
+    var sounds = ['sound01', 'sound02'];
+    var loadAudioOnce = function() {
+      $window.document.getElementById(sounds.pop()).load();
+      if (sounds.length === 0) {
+        $window.document.removeEventListener('touchstart', loadAudioOnce, true);
+      }
+    };
+    $window.document.addEventListener('touchstart', loadAudioOnce, true);
   }
 ]);

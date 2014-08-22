@@ -31,13 +31,22 @@ html(ng-app="MainModule")#ng-app
         fa-modifier(fa-origin="[0.5, 0.5]", ng-repeat="circle in circles", fa-size="[40, 40]", fa-translate="circle")
           fa-surface
             .circle(ng-class="{geki: circle.rare1}") {{circle.rare1 ? '激' : '暑'}}
+        fa-modifier(fa-origin="[0.5, 0.5]", ng-repeat="(key, finger) in fingers", fa-size="[60, 90]", fa-translate="finger.position")
+          fa-surface
+            img(src="static/image/finger.png")
     .dialog(ng-show="show_message", ng-click="show_message = null")
       .content
         p {{show_message}}
     .intro(ng-hide="ready", ng-click="ready = true")
       .content
-        img(ng-hide="initialized", src="static/loading.gif")
+        img(ng-hide="initialized", src="static/image/loading.gif")
         h1 暑さをみんなでふっとばせ！
-        p [最低限の説明]
+        p [説明]
         p 画面の上部をタップすると「暑」玉が落ちてきて、画面の下部を押すとそれを弾く。画面外まで出したら消滅する。
         p 同時に接続している人がいると、玉の追加アクションも弾くアクションも共有される。
+    audio#sound01(preload="auto")
+      source(src="static/sound/by_chance.mp3" type="audio/mp3")
+      source(src="static/sound/by_chance.ogg" type="audio/ogg")
+    audio#sound02(preload="auto")
+      source(src="static/sound/launcher1.mp3" type="audio/mp3")
+      source(src="static/sound/launcher1.ogg" type="audio/ogg")
