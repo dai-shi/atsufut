@@ -17,7 +17,9 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 
 app.get('/', function(req, res) {
-  res.render('index');
+  res.render('index', {
+    base_url: process.env.BASE_URL || ''
+  });
 });
 
 app.get(new RegExp('^/static/(.+)\\.html$'), function(req, res) {
