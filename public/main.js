@@ -109,11 +109,13 @@ angular.module('MainModule').controller('MainController', ['$scope', '$famous', 
       circle.created_at = Date.now();
       circle.rare1 = Math.random() < 0.01;
       $scope.circles.push(circle);
-      if (!sound01.ended) {
-        sound01.pause();
-        sound01.currentTime = 0;
-      }
-      sound01.play();
+      try {
+        if (!sound01.ended) {
+          sound01.pause();
+          sound01.currentTime = 0;
+        }
+        sound01.play();
+      } catch (e) {}
     }
 
     function deleteCircle(circle) {
@@ -136,11 +138,13 @@ angular.module('MainModule').controller('MainController', ['$scope', '$famous', 
         decayFunction: Repulsion.DECAY_FUNCTIONS.INVERSE
       });
       repulsion.applyForce($scope.circles);
-      if (!sound02.ended) {
-        sound02.pause();
-        sound02.currentTime = 0;
-      }
-      sound02.play();
+      try {
+        if (!sound02.ended) {
+          sound02.pause();
+          sound02.currentTime = 0;
+        }
+        sound02.play();
+      } catch (e) {}
     }
 
     $scope.clickBody = function(e) {
