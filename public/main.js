@@ -171,6 +171,20 @@ angular.module('MainModule').controller('MainController', ['$scope', '$famous', 
       }
     };
 
+    $window.addEventListener('devicemotion', function(event) {
+      if (Math.abs(event.acceleration.y) < 10) return;
+      $scope.$apply(function() {
+        var relX = 0;
+        createCircle(relX);
+        updateFinger(fingerKey, relX, true);
+        $scope.sendMessage({
+          action: 'create',
+          x: relX,
+          key: fingerKey
+        });
+      });
+    });
+
     function handleRemoteMessage(event, data) {
       if (!$scope.ready || $scope.show_message) return;
       $scope.$apply(function() {
