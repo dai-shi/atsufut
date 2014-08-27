@@ -51,7 +51,7 @@ angular.module('MainModule').controller('MainController', ['$scope', '$famous', 
       });
     }
     var collision = new Collision({
-      restitution: 0.4
+      restitution: 0.2
     });
     var force = new Force([0, 0.0007, 0]);
 
@@ -134,7 +134,7 @@ angular.module('MainModule').controller('MainController', ['$scope', '$famous', 
 
       var repulsion = new Repulsion({
         anchor: [x, $scope.windowHeight / 2],
-        strength: 1.25,
+        strength: 3.5,
         decayFunction: Repulsion.DECAY_FUNCTIONS.INVERSE
       });
       repulsion.applyForce($scope.circles);
@@ -209,8 +209,6 @@ angular.module('MainModule').controller('MainController', ['$scope', '$famous', 
 
     $scope.initialized = true;
 
-    //TODO: sound
-    //TODO: user counter
     //BUG: resize does not work
   }
 ]);
