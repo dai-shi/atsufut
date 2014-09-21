@@ -147,8 +147,10 @@ angular.module('MainModule').controller('MainController', ['$scope', '$famous', 
       } catch (e) {}
     }
 
+    var lastRepluseTime = 0;
     $scope.clickBody = function(e) {
       if (!$scope.ready || $scope.show_message) return;
+      var now = Date.now();
       var posX = e.x || e.clientX || e.detail && e.detail.clientX;
       var posY = e.y || e.clientY || e.detail && e.detail.clientY;
       var relX = posX - $scope.windowWidth / 2;
@@ -160,7 +162,8 @@ angular.module('MainModule').controller('MainController', ['$scope', '$famous', 
           x: relX,
           key: fingerKey
         });
-      } else {
+      } else if (lastRepluseTime + 1000 < now) {
+        lastRepluseTime = now;
         repulseCircles(relX);
         updateFinger(fingerKey, relX, false);
         $scope.sendMessage({
