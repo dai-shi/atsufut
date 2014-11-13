@@ -1,41 +1,36 @@
 doctype html
-html(ng-app="MainModule")#ng-app
+html(ng-app="MainModule", ng-controller="MainController")#ng-app
   head
     meta(charset="utf-8")
     meta(content="chrome=1", http-equiv="X-UA-Compatible")
     meta(name="viewport", content="width=device-width, initial-scale=1, user-scalable=no")
     meta(name="apple-mobile-web-app-capable", content="yes")
     meta(name="apple-mobile-web-app-status-bar-style", content="black-translucent")
-    //-
-      link(href="static/image/apple-touch-icon.png", rel="apple-touch-icon")
-      link(href="static/image/apple-touch-startup-image-320x460.png", rel="apple-touch-startup-image")
-      link(href="static/image/apple-touch-startup-image-640x1096.png", rel="apple-touch-startup-image", media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)")
     title 暑さをみんなでふっとばせ！
     meta(property="og:title", content="暑さをみんなでふっとばせ！")
     meta(property="og:locale", content="ja_JP")
     meta(property="og:description", content="暑い気持ちをシェアする1ビットコミュニケーションアプリ")
     meta(property="og:url", content="#{base_url}/")
     meta(property="og:image", content="#{base_url}/static/image/thumbnail.jpg")
-    link(href="static/bower_components/famous/core/famous.css", rel="stylesheet")
-    link(href="static/bower_components/famous-angular/dist/famous-angular.min.css", rel="stylesheet")
+    link(href="//cdn.rawgit.com/Famous/famous-angular/0.5.0/dist/famous-angular.min.css", rel="stylesheet")
     link(href="static/main.css", rel="stylesheet")
+    script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular.min.js")
+    script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular-touch.min.js")
+    script(src="static/famous-global.js")
+    script(src="//cdn.rawgit.com/Famous/famous-angular/0.5.0/dist/famous-angular.min.js")
     script(src="socket.io/socket.io.js")
-    script(src="static/bower_components/requirejs/require.js")
-    script.
-      require.config({baseUrl: 'static/bower_components', waitSeconds: 300});
-    script(src="static/bower_components/angular/angular.js")
-    script(src="static/bower_components/angular-touch/angular-touch.min.js")
-    script(src="static/bower_components/famous-angular/dist/famous-angular.min.js")
     script(src="static/main.js")
-  body(ng-controller="MainController", my-touchstart="clickBody")
+  body(my-touchbegin="clickBody")
     .main
       fa-app(style="height: 100%")
-        fa-modifier(fa-origin="[0.5, 0.5]", ng-repeat="circle in circles", fa-size="[40, 40]", fa-translate="circle")
-          fa-surface
-            .circle(ng-class="{geki: circle.rare1}") {{circle.rare1 ? '激' : '暑'}}
-        fa-modifier(fa-origin="[0.5, 0.5]", ng-repeat="(key, finger) in fingers", fa-size="[60, 90]", fa-translate="finger.position")
-          fa-surface
-            img(src="static/image/finger.png")
+        fa-modifier(fa-align="[0.5, 0.5]")
+          fa-modifier(fa-origin="[0.5, 0.5]", ng-repeat="circle in circles", fa-size="[40, 40]", fa-translate="circle")
+            fa-surface
+              .circle(ng-class="{geki: circle.rare1}") {{circle.rare1 ? '激' : '暑'}}
+        fa-modifier(fa-align="[0.5, 0.5]")
+          fa-modifier(fa-origin="[0.5, 0.5]", ng-repeat="(key, finger) in fingers", fa-size="[60, 90]", fa-translate="finger.position")
+            fa-surface
+              img(src="static/image/finger.png")
     .dialog(ng-show="show_message", ng-click="show_message = null")
       .content
         p {{show_message}}
