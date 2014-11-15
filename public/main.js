@@ -51,8 +51,8 @@ angular.module('MainModule').run(['$rootScope', '$window', '$location',
   }
 ]);
 
-angular.module('MainModule').controller('MainController', ['$scope', '$famous', '$window',
-  function($scope, $famous, $window) {
+angular.module('MainModule').controller('MainController', ['$scope', '$famous', '$window', '$location',
+  function($scope, $famous, $window, $location) {
 
     var Engine = $famous['famous/core/Engine'];
     var PhysicsEngine = $famous['famous/physics/PhysicsEngine'];
@@ -80,6 +80,13 @@ angular.module('MainModule').controller('MainController', ['$scope', '$famous', 
 
     var sound01 = $window.document.getElementById('sound01');
     var sound02 = $window.document.getElementById('sound02');
+
+    var label = $location.search().label || '暑';
+    var color = $location.search().color || '#b80000';
+    var border = $location.search().border || '#930000';
+    var label2 = $location.search().label || '激';
+    var color2 = $location.search().color || '#ff6600';
+    var border2 = $location.search().border || '#e65c00';
 
     $scope.fingers = {};
     var fingerKey = Math.floor(Math.random() * 256);
@@ -128,7 +135,15 @@ angular.module('MainModule').controller('MainController', ['$scope', '$famous', 
       physicsEngine.attach(force, circle);
       physicsEngine.attach(collision, $scope.circles.slice(0), circle);
       circle.created_at = Date.now();
-      circle.rare1 = Math.random() < 0.01;
+      if (Math.random() > 0.005) {
+        circle.label = label;
+        circle.color = color;
+        circle.border = border;
+      } else {
+        circle.label = label2;
+        circle.color = color2;
+        circle.border = border2;
+      }
       $scope.circles.push(circle);
       try {
         if (!sound01.ended) {
