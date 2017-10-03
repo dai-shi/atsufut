@@ -9,11 +9,14 @@ it is pretty simple and the usage itself is not language dependent.
 How to run
 ----------
 
-The running application is available at:
-<http://atsufut.axlight.com/>
+```
+$ PORT=8080 npm start
+```
+
+<http://localhost:8080/>
 
 Or you can change the label like:
-<http://atsufut.axlight.com/#?label=bla>
+<http://localhost:8080/#?label=bla>
 
 How to use
 ----------
